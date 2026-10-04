@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Librarian Dashboard | Library Management System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 700;
+            padding: 10px 12px 30px;
+            line-height: 1.4;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            color: #cbd5e1;
+            padding: 12px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+            background: #1f2937;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+            color: #111827;
+        }
+
+        .admin {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 30px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* ================= FLASH MESSAGE ================= */
+
+        .message {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* ================= STAT CARDS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .stat-info p {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .stat-info h3 {
+            font-size: 22px;
+            color: #111827;
+        }
+
+        /* ================= CARDS ================= */
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: #111827;
+        }
+
+        .card-header p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* ================= FORMS ================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            outline: none;
+            background: white;
+            font-size: 13px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px #dbeafe;
+        }
+
+        button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        tr:hover td {
+            background: #fafcff;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .issued {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .returned {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .action-btn {
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 6px;
+            padding: 7px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .return {
+            background: #16a34a;
+            color: white;
+        }
+
+        .return:hover {
+            background: #15803d;
+        }
+
+        .test-fine {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .test-fine:hover {
+            background: #d97706;
+        }
+
+        .payment-form {
+            display: flex;
+            gap: 5px;
+            margin-top: 7px;
+        }
+
+        .payment-form input {
+            width: 75px;
+            padding: 7px;
+        }
+
+        .payment-form button {
+            padding: 7px 10px;
+            font-size: 11px;
+        }
+
+        /* ================= AMOUNT ================= */
+
+        .amount {
+            font-weight: 600;
+        }
+
+        .fine {
+            color: #dc2626;
+        }
+
+        .paid {
+            color: #16a34a;
+        }
+
+        .pending {
+            color: #ea580c;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .logo {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .logo::before {
+                content: "📚";
+                font-size: 25px;
+            }
+
+            .menu-title,
+            .nav-text {
+                display: none;
+            }
+
+            .nav-link {
+                text-align: center;
+                font-size: 20px;
+            }
+
+            .logout {
+                left: 8px;
+                right: 8px;
+            }
+
+            .main {
+                margin-left: 70px;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+        }
+        /* ================= SEARCH ================= */
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+}
+
+.search-box span {
+    font-size: 17px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+}
+
+.search-box input:focus {
+    border: none;
+    box-shadow: none;
+}
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        📚 Library <span>Admin</span>
+    </div>
+
+    <div class="menu-title">
+        Main Menu
+    </div>
+
+    <a href="#dashboard" class="nav-link active">
+        📊 <span class="nav-text">Dashboard</span>
+    </a>
+
+    <a href="#books" class="nav-link">
+        📚 <span class="nav-text">Books</span>
+    </a>
+
+    <a href="#issue" class="nav-link">
+        📖 <span class="nav-text">Issue Book</span>
+    </a>
+
+    <a href="#students" class="nav-link">
+        👨‍🎓 <span class="nav-text">Students</span>
+    </a>
+
+    <a href="#records" class="nav-link">
+        📋 <span class="nav-text">Records</span>
+    </a>
+
+    <a href="/logout" onclick="return confirm('Are you sure you want to logout?');">
+    Logout
+</a>
+
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <h1>
+            Librarian Dashboard
+        </h1>
+
+        <div class="admin">
+
+            <div class="avatar">
+                {{ session["name"][0] }}
+            </div>
+
+            <div>
+
+                <div class="admin-name">
+                    {{ session["name"] }}
+                </div>
+
+                <div class="admin-role">
+                    Librarian
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="content" id="dashboard">
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            <h2>
+                Welcome back, {{ session["name"] }} 👋
+            </h2>
+
+            <p>
+                Manage books, students, issues and payments from one place.
+            </p>
+
+        </div>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages() %}
+
+            {% for message in messages %}
+
+                <div class="message">
+                    ✓ {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- ================= STATISTICS ================= -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Total Books</p>
+
+                    <h3>
+                        {{ books|length }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👨‍🎓
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Total Students</p>
+
+                    <h3>
+                        {{ students|length }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📖
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Total Records</p>
+
+                    <h3>
+                        {{ issues|length }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💰
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Pending Fines</p>
+
+                    <h3>
+
+                        ₹{{ issues | sum(attribute="fine") -
+                        issues | sum(attribute="paid") }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= ADD BOOK ================= -->
+
+        <div class="card" id="books">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        ➕ Add New Book
+                    </h2>
+
+                    <p>
+                        Add a new book to the library inventory.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form action="/add_book" method="POST">
+
+                <div class="form-grid">
+
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Book Title"
+                        required>
+
+                    <input
+                        type="text"
+                        name="author"
+                        placeholder="Author"
+                        required>
+
+                    <input
+                        type="text"
+                        name="category"
+                        placeholder="Category">
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        placeholder="Quantity"
+                        min="1"
+                        required>
+
+                </div>
+
+                <br>
+
+                <button type="submit">
+                    Add Book
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= BOOK LIST ================= -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        📚 Library Inventory
+                    </h2>
+
+                    <p>
+                        Current books and their availability.
+                    </p>
+
+                </div>
+
+            </div>
+         <div class="search-box">
+
+    <span>🔍</span>
+
+    <input
+        type="text"
+        id="bookSearch"
+        placeholder="Search by book title, author or category..."
+        onkeyup="searchBooks()">
+
+</div>
+
+            <div class="table-container">
+
+                <table id="booksTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Total</th>
+                            <th>Available</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for book in books %}
+
+                        <tr>
+
+                            <td>
+                                #{{ book["id"] }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ book["title"] }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ book["author"] }}
+                            </td>
+
+                            <td>
+                                {{ book["category"] or "General" }}
+                            </td>
+
+                            <td>
+                                {{ book["quantity"] }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ book["available"] }}
+                                </strong>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= ISSUE BOOK ================= -->
+
+        <div class="card" id="issue">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        📖 Issue Book
+                    </h2>
+
+                    <p>
+                        Issue a book to a registered student.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form action="/issue_book" method="POST">
+
+                <div class="form-grid">
+
+                    <select name="student_id" required>
+
+                        <option value="">
+                            Select Student
+                        </option>
+
+                        {% for student in students %}
+
+                        <option value="{{ student['id'] }}">
+
+                            {{ student["name"] }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <select name="book_id" required>
+
+                        <option value="">
+                            Select Available Book
+                        </option>
+
+                        {% for book in books %}
+
+                            {% if book["available"] > 0 %}
+
+                            <option value="{{ book['id'] }}">
+
+                                {{ book["title"] }}
+                                — {{ book["available"] }} available
+
+                            </option>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <button type="submit">
+                        Issue Book
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= STUDENTS ================= -->
+
+        <div class="card" id="students">
+
+            
+            <div class="card-header">
+    <div>
+        <h2>👥 Registered Students</h2>
+        <p>Students currently registered in the library.</p>
+    </div>
+</div>
+
+<div class="search-box">
+    <span>🔍</span>
+    <input
+        type="text"
+        id="studentSearch"
+        placeholder="Search by student name or email..."
+        onkeyup="searchStudents()">
+</div>
+
+<div class="table-container">
+
+                <table id="studentsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                        <tr>
+
+                            <td>
+                                #{{ student["id"] }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ student["name"] }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ student["email"] }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RECORDS ================= -->
+
+        <div class="card" id="records">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        📋 Issue, Return & Payment Records
+                    </h2>
+
+                    <p>
+                        Track borrowing, returns, fines and payments.
+                    </p>
+
+                </div>
+<div class="search-box">
+    <span>🔍</span>
+    <input
+        type="text"
+        id="recordSearch"
+        placeholder="Search by student, book or status..."
+        onkeyup="searchRecords()">
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table id="recordsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Student</th>
+                            <th>Book</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Return Date</th>
+                            <th>Fine</th>
+                            <th>Paid</th>
+                            <th>Pending</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for issue in issues %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ issue["student_name"] }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ issue["book_title"] }}
+                            </td>
+
+                            <td>
+                                {{ issue["issue_date"] }}
+                            </td>
+
+                            <td>
+                                {{ issue["due_date"] }}
+                            </td>
+
+                            <td>
+                                {{ issue["return_date"] or "-" }}
+                            </td>
+
+                            <td class="amount fine">
+                                ₹{{ issue["fine"] }}
+                            </td>
+
+                            <td class="amount paid">
+                                ₹{{ issue["paid"] }}
+                            </td>
+
+                            <td class="amount pending">
+                                ₹{{ issue["fine"] - issue["paid"] }}
+                            </td>
+
+                            <td>
+
+                                {% if issue["status"] == "Returned" %}
+
+                                <span class="status returned">
+                                    Returned
+                                </span>
+
+                                {% else %}
+
+                                <span class="status issued">
+                                    Issued
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if issue["status"] != "Returned" %}
+
+                                <a
+                                    class="action-btn return"
+                                    href="/return_book/{{ issue['id'] }}">
+
+                                    Return
+
+                                </a>
+
+                                {% endif %}
+
+
+                                <a
+                                    class="action-btn test-fine"
+                                    href="/test_fine/{{ issue['id'] }}">
+
+                                    Test Fine ₹50
+
+                                </a>
+
+
+                                {% if issue["fine"] - issue["paid"] > 0 %}
+
+                                <form
+                                    class="payment-form"
+                                    action="/pay_fine/{{ issue['id'] }}"
+                                    method="POST">
+
+                                    <input
+                                        type="number"
+                                        name="amount"
+                                        placeholder="₹"
+                                        min="1"
+                                        step="0.01"
+                                        required>
+
+                                    <button type="submit">
+                                        Pay
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>
+function searchBooks() {
+
+    let input = document
+        .getElementById("bookSearch")
+        .value
+        .toLowerCase();
+
+    let table = document.getElementById("booksTable");
+
+    let rows = table.getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+
+        let text = rows[i].innerText.toLowerCase();
+
+        if (text.includes(input)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
+</script>
+<script>
+function searchStudents() {
+
+    let input = document
+        .getElementById("studentSearch")
+        .value
+        .toLowerCase();
+
+    let table = document.getElementById("studentsTable");
+
+    let rows = table
+        .getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+
+        let text = rows[i].innerText.toLowerCase();
+
+        if (text.includes(input)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
+</script>
+<script>
+function searchRecords() {
+
+    let input = document
+        .getElementById("recordSearch")
+        .value
+        .toLowerCase();
+
+    let table = document.getElementById("recordsTable");
+
+    let rows = table
+        .getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+
+        let text = rows[i].innerText.toLowerCase();
+
+        if (text.includes(input)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
+</script>s
+</body>
+</html>
+</body>
+
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Portal | Library Management System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 700;
+            padding: 10px 12px 30px;
+            line-height: 1.4;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            color: #cbd5e1;
+            padding: 12px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+            background: #1f2937;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+            color: #111827;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .student-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .student-role {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 30px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* ================= SUMMARY CARDS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .stat-info p {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .stat-info h3 {
+            font-size: 22px;
+            color: #111827;
+        }
+
+        .danger-icon {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .success-icon {
+            background: #ecfdf5;
+            color: #16a34a;
+        }
+
+        .warning-icon {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        /* ================= CARDS ================= */
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: #111827;
+        }
+
+        .card-header p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        tr:hover td {
+            background: #fafcff;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .issued {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .returned {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        /* ================= AMOUNTS ================= */
+
+        .fine {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .paid {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        .pending {
+            color: #ea580c;
+            font-weight: 600;
+        }
+
+        /* ================= NOTIFICATIONS ================= */
+
+        .notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #2563eb;
+    border-radius: 10px;
+    transition: 0.2s ease;
+}
+
+.notification:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+        .notification-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+        .notification-text {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.notification-text strong {
+    display: block;
+    color: #1e293b;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.notification-text p {
+    margin: 0;
+}
+
+       .empty {
+    text-align: center;
+    padding: 35px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1050px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .logo {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .logo::before {
+                content: "📚";
+                font-size: 25px;
+            }
+
+            .menu-title,
+            .nav-text {
+                display: none;
+            }
+
+            .nav-link {
+                text-align: center;
+                font-size: 20px;
+            }
+
+            .logout {
+                left: 8px;
+                right: 8px;
+            }
+
+            .main {
+                margin-left: 70px;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        📚 Library <span>Student</span>
+    </div>
+
+    <div class="menu-title">
+        Student Menu
+    </div>
+
+    <a href="#dashboard" class="nav-link active">
+        📊 <span class="nav-text">Dashboard</span>
+    </a>
+
+    <a href="#books" class="nav-link">
+        📚 <span class="nav-text">My Books</span>
+    </a>
+
+    <a href="#notifications" class="nav-link">
+        🔔 <span class="nav-text">Notifications</span>
+    </a>
+
+   <a href="/logout" onclick="return confirm('Are you sure you want to logout?');">
+    Logout
+</a>
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <h1>
+            Student Dashboard
+        </h1>
+
+        <div class="student-profile">
+
+            <div class="avatar">
+                {{ session["name"][0] }}
+            </div>
+
+            <div>
+
+                <div class="student-name">
+                    {{ session["name"] }}
+                </div>
+
+                <div class="student-role">
+                    Student
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="content" id="dashboard">
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            <h2>
+                Welcome back, {{ session["name"] }} 👋
+            </h2>
+
+            <p>
+                View your borrowed books, fines, payments and notifications.
+            </p>
+
+        </div>
+
+
+        <!-- ================= STATISTICS ================= -->
+
+        <div class="stats">
+
+
+            <!-- MY BOOKS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+                <div class="stat-info">
+
+                    <p>My Books</p>
+
+                    <h3>
+                        {{ issues|length }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL FINE -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon danger-icon">
+                    💰
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Total Fine</p>
+
+                    <h3>
+                        ₹{{ total_fine }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAID -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon success-icon">
+                    💵
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Paid Amount</p>
+
+                    <h3>
+                        ₹{{ total_paid }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- PENDING -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon warning-icon">
+                    ⚠️
+                </div>
+
+                <div class="stat-info">
+
+                    <p>Pending Amount</p>
+
+                    <h3>
+                        ₹{{ total_pending }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================= BOOK RECORDS ================= -->
+
+        <div class="card" id="books">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        📚 My Library Records
+                    </h2>
+
+                    <p>
+                        Details of books issued to you.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Return Date</th>
+                            <th>Fine</th>
+                            <th>Paid</th>
+                            <th>Pending</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for issue in issues %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ issue["book_title"] }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ issue["author"] }}
+                            </td>
+
+                            <td>
+                                {{ issue["issue_date"] }}
+                            </td>
+
+                            <td>
+                                {{ issue["due_date"] }}
+                            </td>
+
+                            <td>
+                                {{ issue["return_date"] or "-" }}
+                            </td>
+
+                            <td class="fine">
+                                ₹{{ issue["fine"] }}
+                            </td>
+
+                            <td class="paid">
+                                ₹{{ issue["paid"] }}
+                            </td>
+
+                            <td class="pending">
+                                ₹{{ issue["fine"] - issue["paid"] }}
+                            </td>
+
+                            <td>
+
+                                {% if issue["status"] == "Returned" %}
+
+                                <span class="status returned">
+                                    Returned
+                                </span>
+
+                                {% else %}
+
+                                <span class="status issued">
+                                    Issued
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="9" class="empty">
+
+                                📚
+
+                                <br><br>
+
+                                No books have been issued yet.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= NOTIFICATIONS ================= -->
+
+        <div class="card" id="notifications">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        🔔 Notifications
+                    </h2>
+
+                    <p>
+                        Important updates from the library.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% for notification in notifications %}
+
+<div class="notification">
+
+    <div class="notification-icon">
+        🔔
+    </div>
+
+    <div class="notification-text">
+
+        <strong>Library Update</strong>
+
+        <p>
+            {{ notification["message"] }}
+        </p>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="empty">
+
+    🔔
+
+    <br><br>
+
+    No notifications at the moment.
+
+</div>
+
+{% endfor %}
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
